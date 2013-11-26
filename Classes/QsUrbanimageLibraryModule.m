@@ -126,6 +126,8 @@
         if (group != nil) {
             [self.assetGroups addObject:group];
             [tempGroupArray addObject:[self buildGroupProperties:group index:[self.assetGroups count]-1]];
+        }
+        else {
             if (successCallback) {
                 NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:
                                        tempGroupArray, @"groups", nil];

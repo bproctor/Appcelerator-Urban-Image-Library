@@ -149,7 +149,7 @@ The orientation value can be any of the following values:
 It is very simple to use the module.  After registering the module with the application, add
 the following code to your project:
 
-		var photolibrary = require('qs.photos.library');
+		var photolibrary = require('qs.urbanimage.library');
 		var photos = photolibrary.photos({
 			success: function(e) {
 				Ti.API.debug(e.photos);
