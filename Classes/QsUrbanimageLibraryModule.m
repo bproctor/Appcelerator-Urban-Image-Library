@@ -120,17 +120,25 @@
     [tempArray release];
     
     NSMutableArray *tempGroupArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *counts = [[[NSMutableArray alloc] init] autorelease];
                        
     void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
     {
         if (group != nil) {
             [self.assetGroups addObject:group];
             [tempGroupArray addObject:[self buildGroupProperties:group index:[self.assetGroups count]-1]];
+            
+            [counts addObject:[NSNumber numberWithInt:[group numberOfAssets]]];
         }
         else {
+            NSInteger totalCount = 0;
+            for (NSNumber *count in counts) {
+                totalCount += [count intValue];
+            }
             if (successCallback) {
                 NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       tempGroupArray, @"groups", nil];
+                                       tempGroupArray, @"groups",
+                                       [NSNumber numberWithInt:totalCount], @"totalCount", nil];
                 [self _fireEventToListener:@"success" withObject:event listener:successCallback thisObject:nil];
             }
         }
