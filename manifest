@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0
+version: 1.1
 apiversion: 2
 description: A module that provides access to the user's photo library.
 author: Quickstone Software, LLC
@@ -25,4 +25,4 @@ name: urbanimagelibrary
 moduleid: qs.urbanimage.library
 guid: c6d0f327-80e0-400f-929c-012ece34ec98
 platform: iphone
-minsdk: 2.0.1.GA2 
+minsdk: 3.1.3.GA 

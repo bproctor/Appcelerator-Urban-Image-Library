@@ -247,6 +247,53 @@
     
 }
 
+-(void)latest:(id)args
+{
+	// based on code found here: http://stackoverflow.com/questions/8867496/get-last-image-from-photos-app
+	
+    ENSURE_UI_THREAD_1_ARG(args);
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    id error = [args objectForKey:@"error"];
+    RELEASE_TO_NIL(errorCallback);
+    
+    id success = [args objectForKey:@"success"];
+    RELEASE_TO_NIL(successCallback);
+    
+    errorCallback = [error retain];
+    successCallback = [success retain];
+	
+	ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+	
+	// Enumerate just the photos and videos group by using ALAssetsGroupSavedPhotos (Camera Roll)
+	[library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+		
+		// Within the group enumeration block, filter to enumerate just photos.
+		[group setAssetsFilter:[ALAssetsFilter allPhotos]];
+		
+		// Chooses the photo at the last index
+		[group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
+			
+			// The end of the enumeration is signaled by asset == nil.
+			if (alAsset) {
+				// Stop the enumerations
+				*stop = YES; *innerStop = YES;
+				
+				// Do something interesting with the AV asset.
+				//				[self sendTweet:latestPhoto];
+				NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:
+									   [self buildProperties:alAsset includeFullSizeImage:true], @"photo", nil];
+				
+				[self _fireEventToListener:@"success" withObject:event listener:successCallback thisObject:nil];
+			}
+		}];
+	} failureBlock: ^(NSError *error) {
+		if (errorCallback) {
+			[self _fireEventToListener:@"error" withObject:error listener:errorCallback thisObject:nil];
+		}
+	}];
+}
+
 -(void)buildAssets:(NSUInteger) assetGroupType groupId:(NSInteger)groupId start:(NSUInteger)start end:(NSUInteger)end includeFullSizeImage:(Boolean)includeFullSizeImage
 {
     

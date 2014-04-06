@@ -1,7 +1,6 @@
 tmp
 bin
 build
-*.zip
 *.swp
 deploy.sh
 xcuserdata

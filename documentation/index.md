@@ -161,6 +161,21 @@ the following code to your project:
 
 This will load the Photo Library module and will return all saved photos on the device.
 
+To get the latest photo made on the device use something like this:
+
+		var photolibrary = require('qs.urbanimage.library');
+		var latestPhoto = urbanimagelibrary.latest({
+			success: function(e) {
+				// e.photo contains the same properties as described above
+				Ti.API.debug(e.photo);
+			},
+			error: function(e) {
+				Ti.API.error("An error occured! " + e);
+			}
+		});
+
+
+
 ## Author
 
 Quickstone Software, LLC 
