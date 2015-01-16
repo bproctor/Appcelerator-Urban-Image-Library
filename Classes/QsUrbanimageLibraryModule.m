@@ -234,9 +234,6 @@
             
             [self _fireEventToListener:@"success" withObject:event listener:successCallback thisObject:nil];
         };
-        
-        
-        NSLog(@"%@",imageRefURL);
         [assetLibrary assetForURL:imageRefURL
                  resultBlock:ALAssetsLibraryAssetForURLResultBlock 
                 failureBlock:^(NSError *error){
@@ -249,7 +246,7 @@
 
 -(void)latest:(id)args
 {
-	// based on code found here: http://stackoverflow.com/questions/8867496/get-last-image-from-photos-app
+// based on code found here: http://stackoverflow.com/questions/8867496/get-last-image-from-photos-app
 	
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args, NSDictionary);
@@ -282,7 +279,7 @@
 				// Do something interesting with the AV asset.
 				//				[self sendTweet:latestPhoto];
 				NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [self buildProperties:alAsset includeFullSizeImage:true], @"photo", nil];
+                                       [self buildProperties:alAsset includeFullSizeImage:YES], @"photo", nil];
 				
 				[self _fireEventToListener:@"success" withObject:event listener:successCallback thisObject:nil];
 			}
@@ -427,17 +424,18 @@
     
     CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
     CLLocationCoordinate2D latlon = [location coordinate];
-    if (!isnan(latlon.latitude) && !(isnan(latlon.longitude)))
+
+    if (location != nil && !isnan(latlon.latitude) && !(isnan(latlon.longitude)))
     {
         [props setObject: [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSNumber numberWithFloat:latlon.latitude], @"latitude",
                            [NSNumber numberWithFloat:latlon.longitude], @"longitude",
-                           [location altitude], @"altitude",
-                           [location course], @"course",
-                           [location horizontalAccuracy], @"horizontalAccuracy",
-                           [location verticalAccuracy], @"verticalAccuracy",
-                           [location speed], @"speed",
-                           [location timestamp], @"timestamp",
+                           [NSNumber numberWithFloat:[location altitude]], @"altitude",
+                           [NSNumber numberWithFloat:[location course]], @"course",
+                           [NSNumber numberWithFloat:[location horizontalAccuracy]], @"horizontalAccuracy",
+                           [NSNumber numberWithFloat:[location verticalAccuracy]], @"verticalAccuracy",
+                           [NSNumber numberWithFloat:[location speed]], @"speed",
+                           [[location timestamp] description], @"timestamp",
                            nil] 
                   forKey: @"location"];
     }
@@ -453,5 +451,4 @@
     
     return props;
 }
-
 @end
