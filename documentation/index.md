@@ -81,6 +81,12 @@ The photolibrary.photos module can be called using the following parameters:
 
 > The default is 0.
 
+#### includeFullSizeImage
+
+> Includes the image, thumbnail, orientation, and location information.  This defaults to true,
+> but if you set this false, this information will be omitted from the results.  Useful if you
+> just need to grab the urls for a bunch of images.
+
 ### Output Parameters
 
 The module will return an array of objects in the "photos" attribute.
